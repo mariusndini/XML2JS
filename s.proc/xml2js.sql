@@ -1,3 +1,4 @@
+
 create or replace procedure xml2js(xml string)
   returns variant
   language javascript
@@ -15,7 +16,7 @@ var children = rootElem.getChildElements();
 var json = {}; 
 var rootName = rootElem.getName();
 
-json[rootName] = [ ];
+json[rootName] = new Object();
 
 
 for (var i=0; i<children.length; i++) {
@@ -27,10 +28,8 @@ for (var i=0; i<children.length; i++) {
   for (var j=0; j<attributes.length; j++) {
       attrs[attributes[j].getName()] = attributes[j].getValue();
   }
-  var obj = new Object(  )
-  obj[elem.getName()] = attrs;
 
-  json[rootName].push(obj);
+  json[rootName][elem.getName()] = attrs;
 
 }
 
