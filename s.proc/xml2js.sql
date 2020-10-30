@@ -12,7 +12,6 @@
   var doc = parser.parse( XML );
 
   var rootElem = doc.getRootElement(); 
-  var children = rootElem.getChildElements();
 
   var json = {}; 
   var rootName = rootElem.getName();
@@ -22,41 +21,111 @@
 
   json[rootName]['attr'] = getAttrs(rootAttr);
 
-
+  var children = rootElem.getChildElements();
   for (var i=0; i<children.length; i++) {
-    var elem = children[i];
-
-    var attributes = elem.getAttributes();
-    json[rootName][elem.getName()] = getAttrs(attributes, elem);
-
+    var child = children[i];
+    log.push(child.getName());
+    var attributes = child.getAttributes();
+        
+    json[rootName][child.getName()] = getAttrs(attributes, child, child.getName());
+    if(child.getText()){ json[rootName][child.getName()]["text"] = child.getText(); }
   }
 
 
-  function getAttrs(butes, e){
+  function getAttrs(attributes, e, name){
     var attrs = {};
-    var arr  = [];
     var nodeName = null;
-    for (var j=0; j<butes.length; j++) {
-        attrs[butes[j].getName()] = butes[j].getValue();
-        var childAttr = getAttrs2(e);
-        
-        if(childAttr){
-          arr.push(childAttr.attributes);
-          nodeName = childAttr.name;
-        }
+
+    for (var j=0; j<attributes.length; j++) {
+        attrs[attributes[j].getName()] = attributes[j].getValue();
     }
-    if(nodeName){
-      attrs[nodeName] = arr;
-    }
+    attrs[name] = getAttrs2(e);
+
     return attrs;
+
   }
 
 
   function getAttrs2(e){ //have to get children in try block
     try{
+      log.push('A2')
       var children = e.getChildElements();
       var childName = 'NODE';
-      for (var j=0; j<children.length; j++) {
+      for (var i=0; i<children.length; i++) {
+        var child = children[i];
+        var attributes = child.getAttributes();
+        var attrs = {}; 
+
+        for (var j=0; j<attributes.length; j++) {
+            attrs[attributes[j].name] = attributes[j].value;
+        }
+
+        attrs[child.getName()] =  getAttrs3(child);
+
+        //log.push(child.getName() + ":"+child.getText())
+        return {name: child.getName(), attributes:attrs};
+      }
+    }catch(err){
+      log.push('2');
+      return;
+    }
+  }
+
+  function getAttrs3(e){
+    try{
+      log.push('A3')
+      var children = e.getChildElements();
+      var childName = 'NODE';
+      for (var i=0; i<children.length; i++) {
+        var child = children[j];
+        var attributes = child.getAttributes();
+        var attrs = {};
+
+        for (var j=0; j<attributes.length; j++) {
+            attrs[attributes[j].name] = attributes[j].value;
+        }
+
+        attrs[ child.getName() ] =  getAttrs4(child);
+        
+        //log.push(child.getName() + ":"+child.getText());
+        return {name: child.getName(), attributes:attrs};
+      }
+    }catch(err){
+      log.push('3');
+      return;
+    }
+  }
+
+  function getAttrs4(e){
+    try{
+      log.push('A4')
+      var children = e.getChildElements();
+      var childName = 'NODE';
+      for (var i=0; i<children.length; i++) {
+        var child = children[j];
+        var attributes = child.getAttributes();
+        var attrs = {}; 
+        
+        for (var j=0; j<attributes.length; j++) {
+            attrs[attributes[j].name] = attributes[j].value;
+        }
+
+        attrs[child.getName()] =  getAttrs5(child);
+        log.push(child.getName() + ":"+child.getText())
+        return {name: child.getName(), attributes:attrs};
+      }
+    }catch(err){
+      log.push('4');
+      return;
+    }
+  }
+
+  function getAttrs5(e){
+    try{
+      log.push('A5')
+      var children = e.getChildElements();
+      var childName = 'NODE';
+      for (var i=0; i<children.length; i++) {
         var child = children[j];
         var attributes = child.getAttributes();
         var attrs = {}; 
@@ -64,13 +133,47 @@
         for (var j=0; j<attributes.length; j++) {
             attrs[attributes[j].name] = attributes[j].value;
         }
+        attrs[child.getName()] =  getAttrs6(child);
+        //log.push(child.getName() + ":"+child.getText())
         return {name: child.getName(), attributes:attrs};
       }
     }catch(err){
-      log.push(err);
+      log.push('5');
       return;
     }
   }
+
+
+
+  function getAttrs6(e){ // 5 levels deep
+    try{
+      log.push('A6')
+      var children = e.getChildElements();
+      var childName = 'NODE';
+      for (var i=0; i<children.length; i++) {
+        var child = children[j];
+        var attributes = child.getAttributes();
+        var attrs = {}; 
+
+        for (var j=0; j<attributes.length; j++) {
+            attrs[attributes[j].name] = attributes[j].value;
+        }
+        //log.push(child.getName() + ":"+child.getText())
+        return {name: child.getName(), attributes:attrs};
+      }
+    }catch(err){
+      log.push('6');
+      return;
+    }
+  }
+
+  
+
+
+
+
+
+
 
   return json;
   $$
