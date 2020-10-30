@@ -24,7 +24,7 @@
   var children = rootElem.getChildElements();
   for (var i=0; i<children.length; i++) {
     var child = children[i];
-    log.push(child.getName());
+    //log.push(child.getName());
     var attributes = child.getAttributes();
         
     json[rootName][child.getName()] = getAttrs(attributes, child, child.getName());
@@ -77,7 +77,7 @@
       var children = e.getChildElements();
       var childName = 'NODE';
       for (var i=0; i<children.length; i++) {
-        var child = children[j];
+        var child = children[i];
         var attributes = child.getAttributes();
         var attrs = {};
 
@@ -100,6 +100,7 @@
     try{
       log.push('A4')
       var children = e.getChildElements();
+      log.push(children);
       var childName = 'NODE';
       for (var i=0; i<children.length; i++) {
         var child = children[j];
@@ -111,7 +112,7 @@
         }
 
         attrs[child.getName()] =  getAttrs5(child);
-        log.push(child.getName() + ":"+child.getText())
+        //log.push(child.getName() + ":"+child.getText())
         return {name: child.getName(), attributes:attrs};
       }
     }catch(err){
